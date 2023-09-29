@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-page">
+        <div class="header">
+            <div class="logo">
+                <h1>Library</h1>
+            </div>
+            <div class="login">
+                <button>Login</button>
+            </div>
+        </div>
+        <div class="add-book">
+            <button class="add-book-button">+ Add Book</button>
+        </div>
+        <div class="main-body">
+            <div class="books">
+                <div class="title">test</div>
+                <div class="author">test</div>
+                <div class="page">100</div>
+                <div class="read">not read</div>
+                <button>remove</button>
+            </div>
+            
+        </div>
+        <div class="footer">
+            <p>Copyright</p>
+        </div>
+    </div>
+    <div class="modals">
+        <h2>Add new book</h2>
+        <form>
+            <input type="text" name="book_title" id="title" class='book-title' placeholder="Title" required>
+            <input type="text" name="book_author" id="author" class='book-author' placeholder="Author" required>
+            <input type="number" name="book_pages" id="pages" class='book-pages' placeholder="Pages" min="10">
+            
+            <label class="switch"> 
+                <input type="checkbox" id="read" class="read" name="read">
+                <span class="slider"></span>
+            </label>
+            <button class="submit">submit</button>
+        </form>
+    </div>
+    <div class="overlay"></div>
+</body>
+</html>
