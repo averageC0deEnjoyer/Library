@@ -1,98 +1,6 @@
 // //cannot take input using element.textContent, have to use element.value !!!!
 
-
-// addBookButton = document.querySelector('.add-book-button');
-// libraryBody = document.getElementsByTagName("body");
-// overlay = document.querySelector('.overlay')
-// modal = document.querySelector('.modals');
-// submitBookButton = document.querySelector('.submit');
-// mainBody = document.querySelector('.main-body');
-
-// addBookButton.addEventListener('click', (e) => {
-//     modal.classList.add('active');
-//     overlay.classList.add('active');
-//     console.log(e);
-// })
-
-
-// window.addEventListener('click', (e) => {
-//     element = e.target;
-//     if(element.classList.contains('overlay')) {
-//         modal.classList.remove('active');
-//         overlay.classList.remove('active');
-//     }
-// })
-
-// submitBookButton.addEventListener('click', (e) => {
-//     element = e.target
-//     e.preventDefault();
-//     inputBookTitle = document.querySelector('.modals .book-title');
-//     inputBookAuthor = document.querySelector('.modals .book-author');
-//     inputBookPages = document.querySelector('.modals .book-pages');
-//     inputRead = document.querySelector('.modals .read');
-//     if(inputBookTitle.value == "" || inputBookAuthor.value == "" || inputBookPages.value == "") {return};
-//     addBookToLibrary(inputBookTitle.value, inputBookAuthor.value, inputBookPages.value, inputRead.value);
-//     document.querySelector('form').reset();
-//     if(element.classList.contains('submit')) {
-//         modal.classList.remove('active');
-//         overlay.classList.remove('active');
-//     }
-//     const projectContainer = document.createElement('div');
-//     const newTitle = document.createElement('div');
-//     const newAuthor = document.createElement('div');
-//     const newPage = document.createElement('div');
-//     const read = document.createElement('div');
-
-//     projectContainer.classList.add('books');
-//     newTitle.classList.add('title');
-//     newAuthor.classList.add('author');
-//     newPage.classList.add('page');
-//     read.classList.add('read');
-
-//     newTitle.textContent = inputBookTitle.value;
-//     newAuthor.textContent = inputBookAuthor.value;
-//     newPage.textContent = inputBookPages.value;
-//     read.textContent = inputRead.value;
-
-
-//     projectContainer.appendChild(newTitle);
-//     projectContainer.appendChild(newAuthor);
-//     projectContainer.appendChild(newPage);
-//     projectContainer.appendChild(read);
-
-//     mainBody.appendChild(projectContainer);
-
-//     console.log(mainBody);
-// })
-
-
-
-
-
-
-// const myLibrary = [];
-
-
-// function addBookToLibrary(title, author, pages, read) {
-//     class Book {
-//         constructor(title, author, pages, read) {
-//             this.title = title;
-//             this.author = author;
-//             this.pages = pages;
-//             this.read = read;
-//         }
-//     }
-//     let bookNew = new Book(title, author, pages, read);
-//     myLibrary.push(bookNew);
-// }
-
-
-
-
-
-// function Book() {
-
-// }
+//how to add eventListener to a dynamically generated button(generated after all things loaded??) 1solution is using document and use contains method
 
 
 
@@ -100,13 +8,13 @@ addBookButton = document.querySelector('.add-book-button');
 overlay = document.querySelector('.overlay');
 modal = document.querySelector('.modals');
 
-addBookButton.addEventListener('click', (e) => {
+addBookButton.addEventListener('click', () => {
     modal.classList.add('active');
     overlay.classList.add('active');
 })
 
-window.addEventListener('click', (e) => {
-    element = e.target;
+window.addEventListener('click', (event) => {
+    element = event.target;
     if(element.classList.contains('overlay')) {
         modal.classList.remove('active');
         overlay.classList.remove('active');
@@ -114,23 +22,66 @@ window.addEventListener('click', (e) => {
 })
 
 submitBtn = document.querySelector('.submit');
-submitBtn.addEventListener('click', (e)=> {
-    e.preventDefault();
-    addBookToLibrary();
+submitBtn.addEventListener('click', (event)=> {
+    let inputTitle = document.querySelector('.modals .book-title').value;
+    let inputAuthor = document.querySelector('.modals .book-author').value;
+    let inputPages = document.querySelector('.modals .book-pages').value;
+    let inputRead = document.querySelector('.modals .read');
+    let inputReadResult = "";
+    let readBool = 0;
+    if(inputRead.checked) {
+        inputReadResult = `I've read`;
+        readBool = 1;
+    } else {
+        inputReadResult = `I haven't read`;
+        readBool = 0;
+    }
+    if(inputTitle == "" || inputAuthor == "" || inputPages == "" ){return;}
+    event.preventDefault();
+    addBookToLibrary(inputTitle, inputAuthor, inputPages, inputReadResult);
+    showBookToLibrary(inputTitle, inputAuthor, inputPages, inputReadResult, readBool);
     modal.classList.remove('active');
     overlay.classList.remove('active');
 });
 
+//to remove element , using button that is dynamically generated
+document.body.addEventListener( 'click', function(event){
+    if(event.target.classList.contains('remove-button')){
+        for(let i=0; i<myLibrary.length;i++){
+            if(event.target.parentElement.firstElementChild.textContent === myLibrary[i].title){
+                myLibrary.splice(i,1);
+                event.target.parentElement.remove();
+                console.log(myLibrary);
+            }
+        }
+    };
+});
 
-removeBtn = document.getElementsByClassName('remove');
+document.body.addEventListener('click', function(event){
+    if(event.target.classList.contains('read')){
+        if(event.target.classList.contains('active')){
+            event.target.classList.remove('active');
+            event.target.textContent = `I haven't read`;
+            for(let i=0; i<myLibrary.length;i++){
+                if(event.target.parentElement.firstElementChild.textContent === myLibrary[i].title){
+                    myLibrary[i].read = `I haven't read`;
+                    console.log(myLibrary);
+                }
+            }
+        } else {
+            event.target.classList.add('active');
+            event.target.textContent = `I've read`;
+            for(let i=0; i<myLibrary.length;i++){
+                if(event.target.parentElement.firstElementChild.textContent === myLibrary[i].title){
+                    myLibrary[i].read = `I've read`;;
+                    console.log(myLibrary);
+                }
+            }
+        }
+    }
+})
 
-for(let i = 0; i < removeBtn.length; i++) {
-    let button = removeBtn[i];
-    console.log(removeBtn)
-    button.addEventListener('click',removeBook);
-}
-
-myLibrary = [];
+let myLibrary = [];
 
 function Book(title, author, pages, read) {
     this.title = title;
@@ -139,29 +90,38 @@ function Book(title, author, pages, read) {
     this.read = read;
 }
 
-function addBookToLibrary() {
-    inputBookTitle = document.querySelector('.modals .book-title').value;
-    inputBookAuthor = document.querySelector('.modals .book-author').value;
-    inputBookPages = document.querySelector('.modals .book-pages').value;
-    inputRead = document.querySelector('.modals .read').value;
-    let newBook = document.createElement('div');
-    bookCase = document.querySelector('.main-body');
-    let newBookDescription = `
-        <div class="title">${inputBookTitle}</div>
-        <div class="author">${inputBookAuthor}</div>
-        <div class="page">${inputBookPages}</div>
-        <div class="read">${inputRead}</div>
-        <button class="remove">Remove</button>`;
-    newBook.innerHTML = newBookDescription;
-    newBook.classList.add('books')
-    bookCase.append(newBook);
+function addBookToLibrary(title, author, pages, read) {
+    const form = document.querySelector('form');
+    book = new Book(title, author, pages, read);
+    myLibrary.push(book);
+    form.reset();
+    console.log(myLibrary);
 }
 
-function removeBook(e){
-    let element = e.target;
-
-    element.parentElement.remove()
+function showBookToLibrary(title, author, pages, read, readbool){
+    let mainBody = document.querySelector('.main-body');
+    let bookDesc = document.createElement('div');
+    let bookDescContent = ""
+    if(readbool == 1) {
+        bookDescContent = `
+        <div class="title">${title}</div>
+        <div class="author">${author}</div>
+        <div class="page">${pages}</div>
+        <div class="read active">${read}</div>
+        <button class="remove-button">remove</button>`
+    } else {
+        bookDescContent = `
+        <div class="title">${title}</div>
+        <div class="author">${author}</div>
+        <div class="page">${pages}</div>
+        <div class="read">${read}</div>
+        <button class="remove-button">remove</button>`}
+    bookDesc.innerHTML = bookDescContent;
+    mainBody.append(bookDesc);
+    bookDesc.classList.add('books')
 }
+
+
 
 
 
